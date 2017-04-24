@@ -1,33 +1,43 @@
 package main.java;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Console;
+
+import javax.swing.JButton;
+
 import processing.core.PApplet;
 
 public class Pixels extends PApplet {
 	ColorPicker pc;
     Grid grid;
+    JButton btn;
+    
     boolean redraw = true;
     boolean inited = false;
     public Pixels() {
     	super();
+    	btn = new JButton("String text");
+    	btn.addActionListener(this);
+    	btn.setActionCommand("disable");
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        if ("disable".equals(e.getActionCommand())) {
+        	System.out.println("val = " + e.getActionCommand());
+        }
     }
     
 	public void settings() {
         size(501, 501);
-        
-    }
-
-    boolean in_bound(float x, float y, float rwidth, float rheight, float px, float py) {
-      return 
-        px >= x && px < (x + rwidth) && 
-        py >= y && py < (y + rheight);
     }
 
     public void draw() {
-    	if (!inited) {
-    		grid = new Grid(10, 300);
-            pc = new ColorPicker(this.g, (int)(grid.grip_size), 200, (int)(width - grid.grip_size), 200, 0);
-            inited = true;
-    	}
+		if (!inited) {
+			grid = new Grid(10, 300);
+	        pc = new ColorPicker(this.g, (int)(grid.grip_size), 200, (int)(width - grid.grip_size), 200, 0);
+	        inited = true;
+		}
       if (redraw) {
         float cps = width - grid.grip_size;
         background(60);
@@ -60,31 +70,31 @@ public class Pixels extends PApplet {
     }
 
     public void mouseClicked() {
-      if (in_bound(grid.grip_size, 0, width - grid.grip_size, 50, mouseX, mouseY)) {
+      if (Geometry.inBound(grid.grip_size, 0, width - grid.grip_size, 50, mouseX, mouseY)) {
         draw_for_save();
         saveFrame();
         redraw = true;
         return;
       }
         
-      if (in_bound(grid.grip_size, 50, width - grid.grip_size, 50, mouseX, mouseY)) {
+      if (Geometry.inBound(grid.grip_size, 50, width - grid.grip_size, 50, mouseX, mouseY)) {
         grid = Grid.grid_scale(grid, 0.9f);
         redraw = true;
         return;
       }
       
-      if (in_bound(grid.grip_size, 100, width - grid.grip_size, 50, mouseX, mouseY)) {
+      if (Geometry.inBound(grid.grip_size, 100, width - grid.grip_size, 50, mouseX, mouseY)) {
         grid = Grid.grid_scale(grid, 1.1f);
         redraw = true;
         return;
       }
       
-      if(in_bound(grid.grip_size, 200, width - grid.grip_size, 50, mouseX, mouseY)) {
+      if(Geometry.inBound(grid.grip_size, 200, width - grid.grip_size, 50, mouseX, mouseY)) {
         println("update color");
         redraw = true;
       }
       
-      if (in_bound(0, 0, grid.grip_size, grid.grip_size, mouseX, mouseY)) {
+      if (Geometry.inBound(0, 0, grid.grip_size, grid.grip_size, mouseX, mouseY)) {
         int idx = Grid.grid_index_for(grid, mouseX, mouseY);
         Grid.grid_toggle_at_index(grid, idx, pc.c);
         redraw = true;
