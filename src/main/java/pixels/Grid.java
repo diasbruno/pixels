@@ -23,13 +23,13 @@ public class Grid {
     this.block_size = size / mat;
     this.values = values;
   }
-
+	  
   void init() {
     for (int i = 0; i < this.values.length; i++) {
       this.values[i] = new Pixel(255);
     }
   }
-
+    
   static void grid_toggle_at_index(Grid g, int i, int cl) {
     g.values[i].toggle = !g.values[i].toggle;
     g.values[i].cl = cl;
@@ -44,7 +44,7 @@ public class Grid {
     }
 
     for (i = 0; i <= g.mat; i++) {
-      c.line(0, i * bs, gs, i * bs);
+      c.line(0, i * bs, gs, i * bs);  
     }
   }
 
@@ -82,3 +82,5 @@ public class Grid {
     }
   }
 }
+
+
